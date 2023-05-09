@@ -73,7 +73,7 @@ class MissedConnections(Resource):
             return {'error': 'User not found'}, 404
 
         party_votes = PartyVote.query.join(PartyUser).filter(PartyUser.user_id == id).all()
-        restaurant_ids = [pv.restaurant_id for pv in party_votes]
+        restaurant_ids = [pv.restaurant for pv in party_votes]
         return make_response(restaurant_ids, 200)
     
 class UserParties(Resource):
@@ -102,8 +102,8 @@ class PartiesRestaurant(Resource):
             party_vote = PartyVote.query.filter_by(partyuser_id=party_user.id).first()
             if not party_vote:
                 return {'error': f'no vote found for user {party_user.id}'}, 404
-            restaurant_id = party_vote.restaurant_id
-            vote_counts[restaurant_id] = vote_counts.get(restaurant_id, 0) + 1
+            restaurant = party_vote.restaurant
+            vote_counts[restaurant] = vote_counts.get(restaurant, 0) + 1
 
         print(vote_counts)
         if not vote_counts:
@@ -207,7 +207,7 @@ class PartyVotes(Resource):
             print(data)
             newVote = PartyVote(
                 partyuser_id=data['partyuser_id'],
-                restaurant_id=data['restaurantId'],
+                restaurant=data['restaurantId'],
                 voted=data['voted']
             )
             db.session.add(newVote)
