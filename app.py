@@ -207,7 +207,7 @@ class PartyVotes(Resource):
             print(data)
             newVote = PartyVote(
                 partyuser_id=data['partyuser_id'],
-                restaurant=data['restaurantId'],
+                restaurant=data['restaurant'],
                 voted=data['voted']
             )
             db.session.add(newVote)
