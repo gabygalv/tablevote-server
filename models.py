@@ -84,30 +84,12 @@ class PartyVote(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     partyuser_id = db.Column(db.Integer, db.ForeignKey('party_users.id'))
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
+    restaurant = db.Column(db.String)
     voted = db.Column(db.Boolean)
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     def ___repr__(self):
         return f'<PartyVote {self.id} * PartyUserId {self.partyuser_id} * RestaurantId {self.restaurant_id} * UpdatedAt {self.updated_at} >'
     
-class Restaurant(db.Model, SerializerMixin):
-    __tablename__ = 'restaurants'
 
-    serialize_rules = ('-',)
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    category = db.Column(db.String)
-    address = db.Column(db.String)
-    link = db.Column(db.String)
-    image_url = db.Column(db.String)
-    rating = db.Column(db.Float)
-    review_count = db.Column(db.Integer)
-    yelp_id = db.Column(db.String)
-
-    party_votes = db.relationship('PartyVote', backref='restaurant')
-
-    def ___repr__(self):
-        return f'<Restaurant {self.id} * Name {self.name} * Link {self.link} >'
 

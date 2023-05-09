@@ -5,7 +5,7 @@ import requests
 import random
 
 from config import app, api, db, API_KEY
-from models import User, Party, PartyUser, PartyVote, Restaurant
+from models import User, Party, PartyUser, PartyVote
 
 class Signup(Resource):
     def post(self):
@@ -215,22 +215,6 @@ class PartyVotes(Resource):
             return make_response(newVote.to_dict(), 201)
         return make_response({'message': 'Unauthorized'}, 401)
 
-class Restaurants(Resource):
-    def post(self):
-        data = request.get_json()
-        new_restaurant = Restaurant(
-            name=data['name'],
-            address=data['location']['address1'],
-            link=data['url'],
-            image_url=data['image_url'],
-            rating=data['rating'],
-            review_count=data['review_count'],
-            yelp_id=data['id']
-        )
-        db.session.add(new_restaurant)
-        db.session.commit()
-        return make_response(new_restaurant.to_dict(), 201)
-
 class YelpSearch(Resource):
     def get(self, ):
         location = request.args.get('location')
@@ -278,7 +262,6 @@ api.add_resource(PartiesRestaurant, '/partiesrestaurant/<int:id>')
 api.add_resource(PartyUsers, '/partyusers')
 api.add_resource(PartyUsersByID, '/partyusers/<int:party_id>/<int:user_id>')
 api.add_resource(PartyVotes, '/partyvotes')
-api.add_resource(Restaurants, '/restaurants')
 api.add_resource(YelpSearch, '/yelpsearch')
 api.add_resource(YelpSearchById, '/yelpsearchbyid/<string:id>')
 api.add_resource(Signup, '/signup', endpoint='signup')
