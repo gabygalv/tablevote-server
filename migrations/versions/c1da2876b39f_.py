@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 99532c06dab6
+Revision ID: c1da2876b39f
 Revises: 
-Create Date: 2023-05-09 11:47:07.068715
+Create Date: 2023-05-10 13:27:10.069491
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '99532c06dab6'
+revision = 'c1da2876b39f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,16 +21,16 @@ def upgrade():
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(), nullable=False),
-    sa.Column('email', sa.String(), nullable=False),
+    sa.Column('phone', sa.String(), nullable=True),
     sa.Column('_password_hash', sa.String(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('email'),
+    sa.UniqueConstraint('phone'),
     sa.UniqueConstraint('username')
     )
     op.create_table('parties',
-    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('id', sa.String(length=4), nullable=False),
     sa.Column('creator_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('CURRENT_DATE'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
@@ -46,7 +46,7 @@ def upgrade():
     op.create_table('party_users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.Column('party_id', sa.Integer(), nullable=True),
+    sa.Column('party_id', sa.String(), nullable=True),
     sa.Column('voted', sa.Boolean(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['party_id'], ['parties.id'], name=op.f('fk_party_users_party_id_parties')),

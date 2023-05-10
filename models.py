@@ -2,6 +2,7 @@ from sqlalchemy.orm import validates
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
+import uuid
 
 from config import db, bcrypt
 
@@ -43,7 +44,7 @@ class Party(db.Model, SerializerMixin):
 
     serialize_rules = ('-party_users',)
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(4), primary_key=True, nullable=False, default=lambda: uuid.uuid4().hex[:4])
     creator_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, server_default=db.func.current_date())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
@@ -66,7 +67,7 @@ class PartyUser(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    party_id = db.Column(db.Integer, db.ForeignKey('parties.id'))
+    party_id = db.Column(db.String, db.ForeignKey('parties.id'))
     voted = db.Column(db.Boolean)
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
