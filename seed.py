@@ -1,25 +1,24 @@
 from datetime import datetime
 from config import db, app
-from models import User, Party, PartyUser, Restaurant, PartyVote
+from models import User, Party, PartyUser, PartyVote
 
 with app.app_context():
 
     print('deleting')
-    User.query.delete()
-    Party.query.delete()
-    PartyUser.query.delete()
-    Restaurant.query.delete()
     PartyVote.query.delete()
+    PartyUser.query.delete()
+    Party.query.delete()
+    User.query.delete()
     print('deleted')
 
 
     # create users
     print('..')
-    user1 = User(username='gaby', email='gaby@example.com', password_hash='password')
-    user2 = User(username='krista', email='krista@example.com', password_hash='password')
-    user3 = User(username='val', email='val@example.com', password_hash='password')
-    user4 = User(username='coco', email='coco@example.com', password_hash='password')
-    user5 = User(username='dolly', email='dolly@example.com', password_hash='password')
+    user1 = User(username='gaby', phone='6024595353', password_hash='password')
+    user2 = User(username='krista', phone='520555555', password_hash='password')
+    user3 = User(username='val', phone='6026666666', password_hash='password')
+    user4 = User(username='coco', phone='9288888888', password_hash='password')
+    user5 = User(username='dolly', phone='6233333333', password_hash='password')
     print('adding')
     db.session.add_all([user1, user2, user3, user4, user5])
     db.session.commit()

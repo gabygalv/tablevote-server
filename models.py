@@ -12,13 +12,13 @@ class User(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
-    email = db.Column(db.String, unique=True, nullable=False)
+    phone = db.Column(db.String, unique=True)
     _password_hash = db.Column(db.String)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    parties = db.relationship('Party', backref='user')
-    partyuser = db.relationship('PartyUser', backref='user')
+    parties = db.relationship('Party', backref='user', cascade='all,delete-orphan')
+    partyuser = db.relationship('PartyUser', backref='user', cascade='all,delete-orphan')
 
 
     @hybrid_property

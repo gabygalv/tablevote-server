@@ -14,7 +14,7 @@ class Signup(Resource):
         try:
             new_user = User(
                 username = data['username'],
-                email=data['email']
+                phone=data['phone']
             )
             new_user.password_hash = data['password']
             db.session.add(new_user)
@@ -40,7 +40,7 @@ class Login(Resource):
     
     def post(self):
         data = request.get_json()
-        check_user = User.query.filter(User.email == data['email']).first()
+        check_user = User.query.filter(User.phone == data['phone']).first()
         if check_user and check_user.authenticate(data['password']):
             session['user_id'] = check_user.id
 
@@ -69,11 +69,14 @@ class Users(Resource):
 class MissedConnections(Resource):
     def get(self, id):
         user = User.query.get(id)
+        print(user)
         if not user:
             return {'error': 'User not found'}, 404
 
         party_votes = PartyVote.query.join(PartyUser).filter(PartyUser.user_id == id).all()
+        print(party_votes)
         restaurant_ids = [pv.restaurant for pv in party_votes]
+        print(restaurant_ids)
         return make_response(restaurant_ids, 200)
     
 class UserParties(Resource):
